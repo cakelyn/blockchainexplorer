@@ -3,6 +3,13 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 
 class Index extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      hashes: []
+    }
+  }
+
   getLastFiveTransInfo() {
     this.getTransactions();
   }
@@ -13,19 +20,27 @@ class Index extends React.Component {
 
     axios.get(url)
       .then((response) => {
-        for (var i = 0; i < 5; i++) {
-          hashes.push(response.data.txrefs[i].tx_hash);
+        for (let i = 0; i < 5; i++) {
+          setTimeout(
+            this.getTransactionInfo(response.data.txrefs[i].tx_hash),
+            350
+          );
         }
       })
-      .catch((err) => {
+      .catch((error) => {
         console.log(`Error: ${error}`);
       });
-
-    console.log(hashes);
   }
 
-  getTransactionInfo() {
+  getTransactionInfo(hash) {
 
+    axios.get(`https://api.blockcypher.com/v1/eth/main/txs/${hash}`)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(`Error: ${error}`);
+      });
   }
 
   render() {
