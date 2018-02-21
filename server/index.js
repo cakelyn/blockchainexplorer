@@ -5,7 +5,8 @@ const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
-const port = 1337;
+app.set('port', (process.env.PORT || 1337));
+const port = app.get('port');
 
 app.use(express.static(path.join(__dirname, '/../client/dist')));
 app.use(bodyParser.json());
