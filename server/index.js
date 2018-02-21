@@ -11,6 +11,9 @@ app.use(express.static(path.join(__dirname, '/../client/dist')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+
+// I am using my own server to make the request to Etherscan in order to keep
+// my API key hidden (you can't use environmental keys on a React client)
 app.post('/transactions', (req, res) => {
   const url = `http://api.etherscan.io/api?module=account&action=txlist&address=${req.body.address}&sort=desc&&apikey=${process.env.API_KEY}`;
 
