@@ -3,19 +3,24 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 
 class Index extends React.Component {
-
-  getLastFiveTransInfo() {
-    this.getTransactions();
+  constructor() {
+    super();
+    this.state = {
+      address: ''
+    }
   }
 
-  getTransactions() {
-    const address = '0xddbd2b932c763ba5b1b7ae3b362eac3e8d40121a';
-    const hashes = [];
+  updateAddress(e) {
+    this.setState({ address: e.target.value })
+  }
+
+  getLastFiveTransInfo(e) {
+    e.preventDefault();
 
     axios({
       method: 'post',
       url: '/transactions',
-      data: { address: address }
+      data: { address: this.state.address }
     })
       .then((response) => {
         console.log(response.data);
@@ -29,7 +34,11 @@ class Index extends React.Component {
   render() {
     return (
       <div>
-        <h1 onClick={this.getLastFiveTransInfo.bind(this)}>Hello world!</h1>
+
+        <form onSubmit={this.getLastFiveTransInfo.bind(this)}>
+          Enter address: <input type="text" name="address" onChange={this.updateAddress.bind(this)} /><br />
+          <input type="submit" value="Search" />
+        </form>
       </div>
     )
   }
