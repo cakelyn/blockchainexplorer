@@ -12,11 +12,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post('/transactions', (req, res) => {
-  const url = `http://api.etherscan.io/api?module=account&action=txlist&address=${req.body.address}&sort=asc&&apikey=${process.env.API_KEY}`;
+  const url = `http://api.etherscan.io/api?module=account&action=txlist&address=${req.body.address}&sort=desc&&apikey=${process.env.API_KEY}`;
 
   axios.get(url)
     .then((response) => {
-      console.log(response.data)
+      res.send(response.data);
     })
     .catch((error) => {
       console.log(`Error: ${error}`);
