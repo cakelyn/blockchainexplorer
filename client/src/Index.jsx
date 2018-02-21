@@ -40,7 +40,7 @@ class Index extends React.Component {
     return (
       <div>
         <Input updateAddress={this.updateAddress} getLastFiveTransInfo={this.getLastFiveTransInfo} />
-        <Transactions />
+        <Transactions transactions={this.state.transactions} />
       </div>
     )
   }
