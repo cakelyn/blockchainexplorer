@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Input from './components/Input.jsx';
 import Transactions from './components/Transactions.jsx';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import axios from 'axios';
 
 class Index extends React.Component {
@@ -10,8 +11,6 @@ class Index extends React.Component {
     this.state = {
       address: '',
       transactions: [],
-      keepUpdating: false,
-      timesUpdated: 0
     }
     this.updateAddress = this.updateAddress.bind(this);
     this.getLastFiveTransInfo = this.getLastFiveTransInfo.bind(this);
@@ -22,7 +21,6 @@ class Index extends React.Component {
   }
 
   getLastFiveTransInfo(e) {
-    console.log('hello')
     e.preventDefault();
 
     axios({
@@ -31,23 +29,23 @@ class Index extends React.Component {
       data: { address: this.state.address }
     })
     .then((response) => {
-      this.setState({ transactions: response.data.result, keepUpdating: true });
+      this.setState({ transactions: response.data.result });
+      // this will make sure that the transaction info live updates
       setTimeout(() => this.getLastFiveTransInfo(e), 1000);
     })
     .catch((err) => {
-      console.log(err);
-      this.setState({ keepUpdating: false });
+      console.log(`Error: ${err}`);
     });
-
   }
-
 
   render() {
     return (
-      <div>
-        <Input updateAddress={this.updateAddress} getLastFiveTransInfo={this.getLastFiveTransInfo} />
-        <Transactions transactions={this.state.transactions} />
-      </div>
+      <MuiThemeProvider>
+        <div>
+          <Input updateAddress={this.updateAddress} getLastFiveTransInfo={this.getLastFiveTransInfo} />
+          <Transactions transactions={this.state.transactions} />
+        </div>
+      </MuiThemeProvider>
     )
   }
 }

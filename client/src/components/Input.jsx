@@ -1,12 +1,21 @@
 import React from 'react';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const Input = (props) => {
 
     return (
       <div>
         <form onSubmit={props.getLastFiveTransInfo.bind(this)}>
-          Enter address: <input type="text" name="address" onChange={props.updateAddress.bind(this)} /><br />
-          <input type="submit" value="Search" />
+          <TextField
+            floatingLabelText="Enter address"
+            name="address"
+            onChange={props.updateAddress} />
+          <br />
+          <RaisedButton
+            label="Seach"
+            primary={true}
+            type="submit" />
         </form>
       </div>
     )
