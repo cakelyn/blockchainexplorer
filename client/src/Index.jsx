@@ -10,6 +10,8 @@ class Index extends React.Component {
     this.state = {
       address: '',
       transactions: [],
+      keepUpdating: false,
+      timesUpdated: 0
     }
     this.updateAddress = this.updateAddress.bind(this);
     this.getLastFiveTransInfo = this.getLastFiveTransInfo.bind(this);
@@ -20,6 +22,7 @@ class Index extends React.Component {
   }
 
   getLastFiveTransInfo(e) {
+    console.log('hello')
     e.preventDefault();
 
     axios({
@@ -27,14 +30,17 @@ class Index extends React.Component {
       url: '/transactions',
       data: { address: this.state.address }
     })
-      .then((response) => {
-        this.setState({ transactions: response.data.result});
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    .then((response) => {
+      this.setState({ transactions: response.data.result, keepUpdating: true });
+      setTimeout(() => this.getLastFiveTransInfo(e), 1000);
+    })
+    .catch((err) => {
+      console.log(err);
+      this.setState({ keepUpdating: false });
+    });
 
   }
+
 
   render() {
     return (
