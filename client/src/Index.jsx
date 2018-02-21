@@ -11,9 +11,11 @@ class Index extends React.Component {
     this.state = {
       address: '',
       transactions: [],
+      showClear: false,
     }
     this.updateAddress = this.updateAddress.bind(this);
     this.getLastFiveTransInfo = this.getLastFiveTransInfo.bind(this);
+    this.clearEverything = this.clearEverything.bind(this);
   }
 
   updateAddress(e) {
@@ -23,18 +25,32 @@ class Index extends React.Component {
   getLastFiveTransInfo(e) {
     e.preventDefault();
 
-    axios({
-      method: 'post',
-      url: '/transactions',
-      data: { address: this.state.address }
-    })
-    .then((response) => {
-      this.setState({ transactions: response.data.result });
-      // this will make sure that the transaction info live updates
-      setTimeout(() => this.getLastFiveTransInfo(e), 1000);
-    })
-    .catch((err) => {
-      console.log(`Error: ${err}`);
+    // we are checking if the address is empty because when the 'clear' button
+    // is clicked, the address is reset to an empty string, and this check
+    // will stop executing the live updates
+    if (this.state.address != '') {
+      axios({
+        method: 'post',
+        url: '/transactions',
+        data: { address: this.state.address }
+      })
+      .then((response) => {
+        this.setState({ transactions: response.data.result, showClear: true });
+
+        // this will make sure that the transaction info live updates
+        setTimeout(() => this.getLastFiveTransInfo(e), 1000);
+      })
+      .catch((err) => {
+        console.log(`Error: ${err}`);
+      });
+    }
+  }
+
+  clearEverything() {
+    this.setState({
+      address: '',
+      transactions: [],
+      showClear: false
     });
   }
 
@@ -42,7 +58,13 @@ class Index extends React.Component {
     return (
       <MuiThemeProvider>
         <div>
-          <Input updateAddress={this.updateAddress} getLastFiveTransInfo={this.getLastFiveTransInfo} />
+          <h1>Blockchain Explorer</h1>
+          <p>See the lastest 5 transactions from any Ethereum address!</p>
+          <Input updateAddress={this.updateAddress}
+                 getLastFiveTransInfo={this.getLastFiveTransInfo}
+                 showClear={this.state.showClear}
+                 clearEverything={this.clearEverything}
+                 value={this.state.address} />
           <Transactions transactions={this.state.transactions} />
         </div>
       </MuiThemeProvider>
