@@ -2,7 +2,8 @@ import React from 'react';
 import Paper from 'material-ui/Paper';
 
 const style = {
-  margin: 15,
+  margin: '0 auto',
+  marginTop: 15,
   padding: 15,
   width: 500
 }
