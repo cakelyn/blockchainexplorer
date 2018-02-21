@@ -6,7 +6,8 @@ class Index extends React.Component {
   constructor() {
     super();
     this.state = {
-      address: ''
+      address: '',
+      transactions: [],
     }
   }
 
@@ -23,7 +24,7 @@ class Index extends React.Component {
       data: { address: this.state.address }
     })
       .then((response) => {
-        console.log(response.data);
+        this.setState({ transactions: response.data.result});
       })
       .catch((err) => {
         console.log(err);
