@@ -10,12 +10,22 @@ const Input = (props) => {
           <TextField
             floatingLabelText="Enter address"
             name="address"
-            onChange={props.updateAddress} />
+            onChange={props.updateAddress}
+            value={props.value}/>
           <br />
           <RaisedButton
             label="Seach"
             primary={true}
             type="submit" />
+          { // this button will only show if there are transactions showing
+            props.showClear ?
+            <RaisedButton
+              label="Clear"
+              secondary={true}
+              onClick={props.clearEverything} />
+            :
+            null
+          }
         </form>
       </div>
     )
